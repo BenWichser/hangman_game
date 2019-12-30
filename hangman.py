@@ -3,6 +3,10 @@
 # Project:  A simple hangman game in Python, using a list of crossword words as
 # list of legal words.  See Readme.md for more information.
 
+"""
+Hangman module.  Requires random.
+"""
+
 
 import random
 
@@ -21,11 +25,11 @@ class Hangman:
         play_game - plays the game
     """
 
-    def __init__(self, word_list):
+    def __init__(self, list_of_words):
         """
         Init method.
         Accepts:
-            word_list = list of legal English words.
+            list_of_words = list of legal English words.
         Creates:
             self._word = word to be guessed
             self.guessed_list = empty list for storing letters in word that
@@ -38,7 +42,7 @@ class Hangman:
                 guesses are made.
         Returns nothing.
         """
-        self._word = self.__word_selector(word_list)
+        self._word = self.__word_selector(list_of_words)
         self.guessed_list = ['' for i in range(len(self._word))]
         self.all_guesses = []
         self.wrong_guesses = set()
@@ -67,7 +71,7 @@ class Hangman:
                 # game won
                 print('You won!  The word was', self._word)
                 return True
-            elif len(self.wrong_guesses) == wrong_guess_limit:
+            if len(self.wrong_guesses) == wrong_guess_limit:
                 # game lost
                 print('You lost.  The word was', self._word)
                 return False
@@ -87,7 +91,7 @@ class Hangman:
             article = 'your next'
         print('\n\nBefore you make', article, 'guess, here\'s the situation:')
         print('1) This is the word, as far as you have figured out so far:')
-        print('    ', end = '')
+        print('    ', end='')
         for char in self.guessed_list:
             if char == '':
                 print('___', end=' ')
@@ -95,9 +99,9 @@ class Hangman:
                 print('_'+char+'_', end=' ')
         print('\n')
         print('2)  These are the letters you have already guessed:')
-        print('    ', end = '')
+        print('    ', end='')
         for letter in self.all_guesses:
-            print(letter, end = ' ')
+            print(letter, end=' ')
         print('\n')
         number_left = wrong_guess_limit - len(self.wrong_guesses)
         if number_left == 1:
@@ -108,15 +112,15 @@ class Hangman:
               )
         return True
 
-    def __word_selector(self, word_list):
+    def __word_selector(self, list_of_words):
         """
         Private method.
         Accepts:
             self -- instance of Hangman class
-            word_list -- list of available words
-        Returns a random word from self.word_list
+            lis_of_words -- list of available words
+        Returns a random word from word_list
         """
-        word = random.choice(word_list)
+        word = random.choice(list_of_words)
         return word
 
     def __difficulty_selector(self, word):
@@ -132,10 +136,8 @@ class Hangman:
         print('WELCOME TO OUR HANGMAN GAME')
         print('The word you will be guessing is', len(word),
               'letters long.')
-        s = 'How many incorrect answers would you like to be allowed'
-        t = 'before you lose? '
-        print(s)
-        wrong_guess_limit = int(input(t))
+        print('How many incorrect answers would you like to be allowed')
+        wrong_guess_limit = int(input('before you lose? '))
         return wrong_guess_limit
 
     def __alphabet_builder(self):
@@ -155,8 +157,8 @@ class Hangman:
         """
         raw_guess = input('What letter would you like to guess? ')
         while raw_guess.upper() not in self.available_guesses:
-            print('Alas,', raw_guess, 'is not one of the letters left to guess.'
-                  )
+            print('Alas,', raw_guess, 'is not one of the letters left to',
+                  'guess.')
             raw_guess = input('What letter would you like to guess? ')
         guess = raw_guess.upper()
         return guess
@@ -172,13 +174,12 @@ class Hangman:
         Returns True if this_guess is in word.  Returns False otherwise.
         """
         if this_guess in word:
-            for i in range(len(word)):
-                if this_guess == word[i]:
-                    self.guessed_list[i] = this_guess
+            for i in enumerate(word):
+                if this_guess == i[1]:
+                    self.guessed_list[i[0]] = this_guess
             return True
-        else:
-            self.wrong_guesses.add(this_guess)
-            return False
+        self.wrong_guesses.add(this_guess)
+        return False
 
 
 def word_list_maker(filename):
@@ -198,10 +199,7 @@ def word_list_maker(filename):
 
 
 if __name__ == '__main__':
-    filename = './words.txt'
-    word_list = word_list_maker(filename)
-    hangman = Hangman(word_list)
-    hangman.play_game()
-#     print(hangman)
-#     for word in word_list:
-#         print(word)
+    FILE_NAME = './words.txt'
+    WORD_LIST = word_list_maker(FILE_NAME)
+    HANGMAN = Hangman(WORD_LIST)
+    HANGMAN.play_game()
