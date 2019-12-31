@@ -42,11 +42,11 @@ class Hangman:
                 guesses are made.
         Returns nothing.
         """
-        self._word = self.__word_selector(list_of_words)
+        self._word = word_selector(list_of_words)
         self.guessed_list = ['' for i in range(len(self._word))]
         self.all_guesses = []
         self.wrong_guesses = set()
-        self.available_guesses = self.__alphabet_builder()
+        self.available_guesses = alphabet_builder()
 
     def __str__(self):
         """Class reporter"""
@@ -60,7 +60,7 @@ class Hangman:
         Returns True if player wins and False if player loses.
         """
         self._word = self._word.upper()
-        wrong_guess_limit = self.__difficulty_selector(self._word)
+        wrong_guess_limit = difficulty_selector(self._word)
         while True:
             self.print_status(wrong_guess_limit)
             this_guess = self.__get_guess()
@@ -112,41 +112,6 @@ class Hangman:
               )
         return True
 
-    def __word_selector(self, list_of_words):
-        """
-        Private method.
-        Accepts:
-            self -- instance of Hangman class
-            lis_of_words -- list of available words
-        Returns a random word from word_list
-        """
-        word = random.choice(list_of_words)
-        return word
-
-    def __difficulty_selector(self, word):
-        """
-        Private method.
-        Accepts:
-            self = Hangman object
-            word = word to guess (string)
-        Asks player for number of incorrect guesses they would like to be
-        allowed before they lose.
-        Returns the number of guesses the player will allow themselves.
-        """
-        print('WELCOME TO OUR HANGMAN GAME')
-        print('The word you will be guessing is', len(word),
-              'letters long.')
-        print('How many incorrect answers would you like to be allowed')
-        wrong_guess_limit = int(input('before you lose? '))
-        return wrong_guess_limit
-
-    def __alphabet_builder(self):
-        """Private method.  Accepts self. Returns set with all alphabet UC"""
-        alphabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-                    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-                    'W', 'X', 'Y', 'Z'}
-        return alphabet
-
     def __get_guess(self):
         """
         Private method.
@@ -196,6 +161,40 @@ def word_list_maker(filename):
     fin = open(filename, 'r')
     word_list = [line.strip() for line in fin]
     return word_list
+
+
+def word_selector(list_of_words):
+    """
+    Accepts:
+        list_of_words -- list of available words
+    Returns a random word from word_list
+    """
+    word = random.choice(list_of_words)
+    return word
+
+
+def difficulty_selector(word):
+    """
+    Accepts:
+        word = word to guess (string)
+    Asks player for number of incorrect guesses they would like to be
+    allowed before they lose.
+    Returns the number of guesses the player will allow themselves.
+    """
+    print('WELCOME TO OUR HANGMAN GAME')
+    print('The word you will be guessing is', len(word),
+          'letters long.')
+    print('How many incorrect answers would you like to be allowed')
+    wrong_guess_limit = int(input('before you lose? '))
+    return wrong_guess_limit
+
+
+def alphabet_builder():
+    """Accepts nothing. Builts and returns set with all alphabet UC"""
+    alphabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                'W', 'X', 'Y', 'Z'}
+    return alphabet
 
 
 if __name__ == '__main__':
